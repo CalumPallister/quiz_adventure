@@ -8,8 +8,7 @@ print('')
 #player
 hp = 100
 mp = 100
-equip = ''
-equipd = 0
+shield = 0
 maxhp = 100
 maxmp = 100
 
@@ -88,7 +87,8 @@ def intro():
 def trapped():
     global count
 
-    do = input("Try to escape? yes or no? ")
+    do = input("""Try to escape?
+yes or no? """)
     print('')      
 
     if do == 'yes':
@@ -137,7 +137,8 @@ def x1y1():
     global maxhp
     global maxmp
 
-    do = input("There are 2 slightly ruined doorways before you, one to the north and to the east as well as an arcane well. heal, up or right? ")
+    do = input("""There are 2 slightly ruined doorways before you, one to the north and to the east as well as an arcane well.
+heal, up or right? """)
     print('')
 
     if do == "up":
@@ -152,7 +153,9 @@ def x1y1():
         hp = maxhp
         mp = maxmp
         print("Health and mana restored")
+        print('')
         x1y1()
+        
 
     else:
         what()
@@ -163,14 +166,11 @@ def x2y1():
     #combat room
     global roomx
     global roomy
-    global hp
-    global mp
-    global maxhp
-    global maxmp
     
     combat()
 
-    do = input("Within this room are 2 doorways, one west, the other east. left or right? ")
+    do = input("""Within this room are 2 doorways, one west, the other east.
+left or right? """)
     print('')
     
     if do == "left":
@@ -178,17 +178,147 @@ def x2y1():
         x1y1()
     elif do == "right":
         roomx = roomx + 1
-
+        x3y1()
     else:
         what()
         print('')
         x2y1()
+
+def x3y1():
+    #blocked room
+    global roomx
+    global roomy
+
+    combat()
+
+    do = input("""The way ahead is blocked by fallen rubble, broken bones litter the floor, you should probably go back.
+left? """)
+    print('')
+    
+    if do == "left":
+        roomx = roomx - 1
+        x2y1()
+    else:
+        what()
+        print('')
+        x3y1()
+
+def x1y2():
+    #note room
+    global roomx
+    global roomy
+
+    do = input("""There are doorways south and east, a note on the floor depicts a creature that is soul-peircingly grotesque;
+in blood is written the words 'Eldritch Horror', you think that escaping this place is probably agood idea...
+right or down? """)
+    print('')
+
+    if do == "down":
+        roomy = roomy - 1
+        x1y1()
+    elif do == "right":
+        roomx = roomx + 1
+        x2y2()
+    else:
+        what()
+        print('')
+        x1y2()
+
+def x2y2():
+    #combat room
+    global roomx
+    global roomy
+
+    combat()
+    
+    do = input("""Within this room are 2 doorways, one west, the other east as well as a skeleton hanging from the ceiling.
+left or right? """)
+    print('')
+    if do == "left":
+        roomx = roomx - 1
+        x1y2()
+    elif do == "right":
+        roomx = roomx + 1
+        x3y2()
+    else:
+        what()
+        print('')
+        x2y2()
+
+def x3y2():
+    #combat room
+    global roomx
+    global roomy
+
+    combat()
+    
+    do = input("""Within this room are 3 doorways, one west, east, and north.
+left, right or up? """)
+    print('')
+    if do == "left":
+        roomx = roomx - 1
+        x2y2()
+    elif do == "right":
+        roomx = roomx + 1
+        x4y2()
+    elif do == "up":
+        roomy == roomy +1
+        x3y3()
+    else:
+        what()
+        print('')
+        x3y2()
+
+def x3y3():
+    #note room
+    global roomx
+    global roomy
+
+    combat()
+    
+    do = input("""There is a doorway to the south, as well as unintelligable writing on the walls.
+down? """)
+    print('')
+    if do == "down":
+        roomy = roomy - 1
+        x3y2()
+    else:
+        what()
+        print('')
+        x3y3()
+
+def x4y2():
+    #combat room
+    global roomx
+    global roomy
+    global hp
+    
+    combat()
+    
+    do = input("""There are 2 doorways, one west, the other south; blood stains the south doorway.
+left or down? """)
+    print('')
+    if do == "left":
+        roomx = roomx - 1
+        x3y2()
+    elif do == "down":
+        roomy == roomy - 1
+        hp = 100
+        coridoor()
+        x4y1()
+    else:
+        what()
+        print('')
+        x4y2()
+
+
     
 def combat():
     global roomx
     global roomy
     global hp
     global mp
+    global shield
     global maxhp
     global maxmp
     global enemy
@@ -202,38 +332,34 @@ def combat():
     
     damage = 0
     spell = ''
-    shield = 0
     if ehp < 1 and o == True:
-
-        if roomx+roomy <= 5:
+        shield = 0
+        if roomx+roomy < 4:
             print("An unerving chill sweeps through your body.")
             enemy = "Goblin"
-        elif roomx+roomy <= 10:
+        elif roomx+roomy < 6:
             print("Something lurks in the darkness.")
             enemy = "Orc"
-        elif roomx+roomy <= 15:
-            print("Something is watching you.")
-            enemy = "Golem"
-        elif roomx+roomy <= 20:
+        elif roomx+roomy < 8:
             print("You hear breathing behind you.")
             enemy = "Troll"
-        elif roomx+roomy < 25:
+        elif roomx+roomy < 10:
             print("A cold stare peirces your soul.")
             enemy = "Eldritch Guardian"
-        elif roomx+roomy == 25:
-            print("You become overwhelmed with dread")
-            enemy = "Eldrich Horror"
+        elif roomx+roomy == 10:
+            print("You become overwhelmed with dread.")
+            enemy = "Eldritch Horror"
             
         ehp = (roomx*roomy*8)
         print ('')
         sleep(.5)
-        combat()
         print(enemy, "attacks!")
+        combat()
         print('')
         
     elif ehp > 0:
 
-        print("Player hp:", hp, " Enemy hp:", ehp)
+        print("Player hp:", hp,"Player mp:", mp,"Barrier hp:", shield, "Enemy hp:", ehp)
         print('')
         
         do = input("use attack, spell or shield? ")
@@ -245,7 +371,6 @@ def combat():
             print('You attack the', enemy, 'and deal',damage, "damage.")
             ehp = ehp - damage
             
-            print(ehp)
         elif do == "spell":
 
             x = randint(1, 4)
@@ -258,29 +383,224 @@ def combat():
             elif x == 4:
                 spell = "purify"
 
-            damage = randint(roomx+room, (roomx*10 + roomy*10)//2)
-            damagedone = damage
-            print("You cast", spell, "on the", enemy, "and deal",damage,"damage.")
-            ehp = ehp - damage
-            mp = mp - (damage // 2)
+            damage = randint(roomx+roomy, (roomx*10 + roomy*10)//2)
+            if mp - (roomx+roomy) > 0:
+                print("You cast", spell, "on the", enemy, "and deal",damage,"damage.")
+                ehp = ehp - damage
+                mp = mp - (damage // 2)
+            else:
+                print("Not enough mp!")
+                print('')
+                combat()
                       
         elif do == "shield":
-            shield = (roomx+roomy)*10
-            mp = mp - shield//2
-            print("You project an arcane barrier that will absorb",shield, "damage")
+            if mp - (((roomx+roomy)*10)//4) > 0:
+                shield = (roomx+roomy)*10
+                mp = mp - shield//4
+                print("You project an arcane barrier that will absorb",shield, "damage.")
+            else:
+                print("Not enough mp!")
+                print('')
+                combat()
+        else:
+            what()
+            print('')
+            combat()
+
+        y = randint(1,5)
+        if y < 5:
+            if ehp > 0:
+                edamage = randint(roomx*2+roomy*2,roomx*5+roomy*5)
+                if shield > 0:
+                    shield = shield - edamage
+                    if shield > 0:
+                        print("Your arcane barrier received", edamage,"damage!")
+                    else:
+                        shield = 0
+                        print("Your arcane barrier was destroyed!")
+                else:
+                    hp = hp - edamage
+                    print("You received",edamage,"damage!")
+        else:
+            if ehp > 0:
+                regain = roomx+roomy+ehp//10
+                ehp = ehp + regain
+                print(enemy,"recovered", regain,"hp!")
+            
 
         if hp < 1:
-            Print("""
+            print('')
+            print("""
                                        =========
                                        GAME OVER
                                        =========""")
+            sleep(2)
             quit
-        elif ehp > 0:
+        if ehp > 0:
+            sleep(0.5)
             combat()
         else:
-            print(enemy, "defeated!")
-        print('')
+            print(enemy, "was slain!")
+
+def coridoor():
+    global hp
     
+    if hp == 100:
+
+        do = input("You enter a long dark hallway. Do you proceed? yes or no? ")
+
+    elif hp == 75:
+
+        do = input("The walls now have small splatters of blood upon them... Do you proceed? ")
+
+    elif hp == 50:
+
+        do = input("Blood grows upon the walls... Do you proceed? ")
+
+    elif hp == 25:
+
+        do = input("Do you proceed? ")
+
+            
+    print('')
+    if do == "yes":
+        hp = hp - 25
+        if hp < 1:
+            print("""
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+""")
+            print("Feelings lost and taken away,")
+            sleep(1.5)
+            print("To reach out this fateful day,")
+            sleep(1.5)
+            print("Pain courses through your veins,")
+            sleep(1.5)
+            print("Bursting into large red stains,")
+            sleep(1.5)
+            print("With spoken words of unknown meaning,")
+            sleep(1.5)
+            print("All this you knew,")
+            sleep(2)
+            print("From knowledge gained while sleeping.")
+            sleep(3)
+            print("""
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+""")
+            print("""
+                                    =========
+                                    GAME OVER
+                                    =========""")
+            sleep(2)
+            quit
+        else:
+            coridoor()
+    else:
+        hp = 100
+        x4y1()
 
 # Leave this at the bottom - it makes start run automatically when you
 # run your code.
