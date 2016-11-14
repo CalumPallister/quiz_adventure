@@ -137,15 +137,15 @@ def x1y1():
     global maxhp
     global maxmp
 
-    do = input("""There are 2 slightly ruined doorways before you, one to the north and to the east as well as an arcane well.
-heal, up or right? """)
+    do = input("""There are 2 slightly ruined doorways before you, one to the north and to the east as well as an arcane well in the centre of the room.
+heal, north or east? """)
     print('')
 
-    if do == "up":
+    if do == "north":
         roomy = roomy + 1
         x1y2()
 
-    elif do == "right":
+    elif do == "east":
         roomx = roomx + 1
         x2y1()
 
@@ -170,13 +170,13 @@ def x2y1():
     combat()
 
     do = input("""Within this room are 2 doorways, one west, the other east.
-left or right? """)
+west or east? """)
     print('')
     
-    if do == "left":
+    if do == "west":
         roomx = roomx - 1
         x1y1()
-    elif do == "right":
+    elif do == "east":
         roomx = roomx + 1
         x3y1()
     else:
@@ -192,10 +192,10 @@ def x3y1():
     combat()
 
     do = input("""The way ahead is blocked by fallen rubble, broken bones litter the floor, you should probably go back.
-left? """)
+west? """)
     print('')
     
-    if do == "left":
+    if do == "west":
         roomx = roomx - 1
         x2y1()
     else:
@@ -208,15 +208,18 @@ def x1y2():
     global roomx
     global roomy
 
-    do = input("""There are doorways south and east, a note on the floor depicts a creature that is soul-peircingly grotesque;
-in blood is written the words 'Eldritch Horror', you think that escaping this place is probably agood idea...
-right or down? """)
+    do = input("""There are doorways south, north and east, a note on the floor depicts a creature that is soul-peircingly grotesque;
+in blood is written the words 'Eldritch Horror', you think that escaping this place is probably a good idea...
+east, north or south? """)
     print('')
 
-    if do == "down":
+    if do == "south":
         roomy = roomy - 1
         x1y1()
-    elif do == "right":
+    elif do == "north":
+        roomy = roomy + 1
+        x1y3()
+    elif do == "east":
         roomx = roomx + 1
         x2y2()
     else:
@@ -232,12 +235,12 @@ def x2y2():
     combat()
     
     do = input("""Within this room are 2 doorways, one west, the other east as well as a skeleton hanging from the ceiling.
-left or right? """)
+west or east? """)
     print('')
-    if do == "left":
+    if do == "west":
         roomx = roomx - 1
         x1y2()
-    elif do == "right":
+    elif do == "east":
         roomx = roomx + 1
         x3y2()
     else:
@@ -253,23 +256,20 @@ def x3y2():
     combat()
     
     do = input("""Within this room are 3 doorways, one west, east, and north.
-left, right or up? """)
+west, east or north? """)
     print('')
-    if do == "left":
+    if do == "west":
         roomx = roomx - 1
         x2y2()
-    elif do == "right":
+    elif do == "east":
         roomx = roomx + 1
         x4y2()
-    elif do == "up":
-        roomy == roomy +1
-        x3y3()
     else:
         what()
         print('')
         x3y2()
 
-def x3y3():
+def x1y3():
     #note room
     global roomx
     global roomy
@@ -277,18 +277,18 @@ def x3y3():
     combat()
     
     do = input("""There is a doorway to the south, as well as unintelligable writing on the walls.
-down? """)
+south? """)
     print('')
-    if do == "down":
+    if do == "south":
         roomy = roomy - 1
-        x3y2()
+        x1y2()
     else:
         what()
         print('')
-        x3y3()
+        x1y3()
 
 def x4y2():
-    #combat room
+    #coridoor
     global roomx
     global roomy
     global hp
@@ -296,12 +296,12 @@ def x4y2():
     combat()
     
     do = input("""There are 2 doorways, one west, the other south; blood stains the south doorway.
-left or down? """)
+west or south? """)
     print('')
-    if do == "left":
+    if do == "west":
         roomx = roomx - 1
         x3y2()
-    elif do == "down":
+    elif do == "south":
         roomy == roomy - 1
         hp = 100
         coridoor()
@@ -311,7 +311,99 @@ left or down? """)
         print('')
         x4y2()
 
+def x4y1():
+    #Blocked room
+    global roomx
+    global roomy
+    global hp
+    
+    combat()
+    
+    do = input("""There are 2 blocked doorways, and an accessable one is to the east, where a faint blue glow is emmited from within.
+east? """)
+    print('')
+    if do == "east":
+        roomx = roomx + 1
+        x5y1()
+    else:
+        what()
+        print('')
+        x4y1()
 
+def x5y1():
+    #start
+    global roomx
+    global roomy
+    global hp
+    global mp
+    global maxhp
+    global maxmp
+
+    do = input("""There are 2 slightly ruined doorways before you, one to the north and to the west as well as an arcane well in the centre of the room.
+heal, north or west? """)
+    print('')
+
+    if do == "north":
+        roomy = roomy + 1
+        x5y2()
+
+    elif do == "west":
+        roomx = roomx - 1
+        x4y1()
+
+    elif do == "heal":
+        hp = maxhp
+        mp = maxmp
+        print("Health and mana restored")
+        print('')
+        x5y1()
+
+    else:
+        what()
+        print('')
+        x5y1()
+
+def x5y2():
+    #Combat room
+    global roomx
+    global roomy
+    global hp
+    
+    combat()
+    
+    do = input("""There are 2 doorways, one is to the north and another to the south, a skull is embedded in the west wall.
+north or south? """)
+    print('')
+    if do == "north":
+        roomy = roomy + 1
+        x5y3()
+    elif do == "south":
+        roomy = roomy - 1
+        x5y3()
+    else:
+        what()
+        print('')
+        x5y2()
+
+def x5y3():
+    #Combat room
+    global roomx
+    global roomy
+    global hp
+    
+    combat()
+    
+    do = input("""There is a doorway to the west and another to the south, .
+west or south? """)
+    print('')
+    if do == "west":
+        roomy = roomy + 1
+        x5y3()
+    elif do == south
+    else:
+        what()
+        print('')
+        x5y2()
     
 def combat():
     global roomx
@@ -425,7 +517,7 @@ def combat():
             if ehp > 0:
                 regain = roomx+roomy+ehp//10
                 ehp = ehp + regain
-                print(enemy,"recovered", regain,"hp!")
+                print(enemy,"gained", regain,"hp!")
             
 
         if hp < 1:
@@ -436,10 +528,10 @@ def combat():
                                        =========""")
             sleep(2)
             quit
-        if ehp > 0:
+        if ehp > 0 and hp > 0:
             sleep(0.5)
             combat()
-        else:
+        elif ehp < 1:
             print(enemy, "was slain!")
 
 def coridoor():
@@ -459,7 +551,7 @@ def coridoor():
 
     elif hp == 25:
 
-        do = input("Do you proceed? ")
+        do = input("Distant wailing draws nearer... Do you proceed? ")
 
             
     print('')
@@ -523,17 +615,17 @@ def coridoor():
 """)
             print("Feelings lost and taken away,")
             sleep(1.5)
-            print("To reach out this fateful day,")
+            print("Reaching out this fateful day,")
             sleep(1.5)
-            print("Pain courses through your veins,")
+            print("Sudden pain within your veins,")
             sleep(1.5)
-            print("Bursting into large red stains,")
+            print("Bursting, causing large red stains,")
             sleep(1.5)
-            print("With spoken words of unknown meaning,")
+            print("He speaks of words with unknown meaning,")
             sleep(1.5)
             print("All this you knew,")
-            sleep(2)
-            print("From knowledge gained while sleeping.")
+            sleep(1.5)
+            print("From knowledge gained while dreaming.")
             sleep(3)
             print("""
 
