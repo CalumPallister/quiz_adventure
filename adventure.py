@@ -228,7 +228,6 @@ east, north or south? """)
         x1y2()
 
 def x2y2():
-    #combat room
     global roomx
     global roomy
 
@@ -249,7 +248,6 @@ west or east? """)
         x2y2()
 
 def x3y2():
-    #combat room
     global roomx
     global roomy
 
@@ -319,7 +317,7 @@ def x4y1():
     
     combat()
     
-    do = input("""There are 2 blocked doorways, and an accessable one is to the east, where a faint blue glow is emmited from within.
+    do = input("""There are 2 blocked doorways, and an accessable one is to the east, where a faint blue glow is emitted from within.
 east? """)
     print('')
     if do == "east":
@@ -331,7 +329,7 @@ east? """)
         x4y1()
 
 def x5y1():
-    #start
+    #well
     global roomx
     global roomy
     global hp
@@ -364,14 +362,13 @@ heal, north or west? """)
         x5y1()
 
 def x5y2():
-    #Combat room
     global roomx
     global roomy
     global hp
     
     combat()
     
-    do = input("""There are 2 doorways, one is to the north and another to the south, a skull is embedded in the west wall.
+    do = input("""There are 2 doorways, one is to the north and another to the south, a bloody skull is embedded in the west wall.
 north or south? """)
     print('')
     if do == "north":
@@ -386,25 +383,282 @@ north or south? """)
         x5y2()
 
 def x5y3():
-    #Combat room
     global roomx
     global roomy
     global hp
     
     combat()
     
-    do = input("""There is a doorway to the west and another to the south, .
+    do = input("""There is a doorway to the west and another to the south, a faint grey mist emerges through a crack in the north wall.
 west or south? """)
     print('')
     if do == "west":
-        roomy = roomy + 1
-        x5y3()
-    elif do == south
+        roomx = roomx - 1
+        x4y3()
+    elif do == "south":
+        roomy = roomy - 1
+        x4y3()
     else:
         what()
         print('')
-        x5y2()
+        x5y3()
+
+def x4y3():
+    global roomx
+    global roomy
+    global hp
     
+    combat()
+    
+    do = input("""There are two doorways to the west and east, a note depicts a large hooded creature, in blood is writen: Eldritch Guardian.
+west or east? """)
+    print('')
+    if do == "west":
+        roomx = roomx - 1
+        x3y3()
+    elif do == "east":
+        roomx = roomx + 1
+        x5y3()
+    else:
+        what()
+        print('')
+        x4y3()
+
+def x3y3():
+    global roomx
+    global roomy
+    global hp
+    
+    combat()
+    
+    do = input("""There are doorways to the north and east, this room seems colder than the others.
+north or east? """)
+    print('')
+    if do == "north":
+        roomy = roomy + 1
+        x3y4()
+    elif do == "east":
+        roomx = roomx + 1
+        x4y3()
+    else:
+        what()
+        print('')
+        x3y3()
+
+def x3y4():
+    global roomx
+    global roomy
+    global hp
+    
+    combat()
+    
+    do = input("""There are doorways to the south and west.
+south or west? """)
+    print('')
+    if do == "south":
+        roomy = roomy - 1
+        x3y3()
+    elif do == "west":
+        roomx = roomx - 1
+        x2y4()
+    else:
+        what()
+        print('')
+        x3y4()
+
+def x2y4():
+    global roomx
+    global roomy
+    global hp
+    
+    combat()
+    
+    do = input("""There are doorways to the south and west, the eastern doorway has collapsed.
+south or west? """)
+    print('')
+    if do == "south":
+        roomy = roomy - 1
+        x2y3()
+    elif do == "west":
+        roomx = roomx - 1
+        x1y4()
+    else:
+        what()
+        print('')
+        x2y4()
+
+def x1y4():
+    global roomx
+    global roomy
+    global hp
+    
+    combat()
+    
+    do = input("""There is a doorway to the east and to the north, where a faint blue glow is emitted from within.
+north or east? """)
+    print('')
+    if do == "north":
+        roomy = roomy + 1
+        x1y5()
+    elif do == "east":
+        roomx = roomx + 1
+        x1y4()
+    else:
+        what()
+        print('')
+        x2y4()
+
+def x2y3():
+    #blocked room
+    global roomx
+    global roomy
+
+    combat()
+
+    do = input("""There is nothing in this room other than a pile of bones, you should probably go back.
+north? """)
+    print('')
+    
+    if do == "north":
+        roomy = roomy + 1
+        x2y4()
+    else:
+        what()
+        print('')
+        x2y3()
+
+def x5y1():
+    #well
+    global roomx
+    global roomy
+    global hp
+    global mp
+    global maxhp
+    global maxmp
+
+    do = input("""There is a slightly ruined doorway to the east, a collapsed doorway to the south, and an arcane well in the centre of the room.
+heal, east? """)
+    print('')
+
+    if do == "east":
+        roomx = roomx + 1
+        x5y2()
+
+    elif do == "heal":
+        hp = maxhp
+        mp = maxmp
+        print("Health and mana restored")
+        print('')
+        x5y1()
+
+    else:
+        what()
+        print('')
+        x5y1()
+
+def x2y5():
+    #mistroom 1
+    global roomx
+    global roomy
+
+    combat()
+
+    do = input("""The western doorway collapses, a faint mist pours through the eastern doorway.
+east? """)
+    print('')
+    
+    if do == "east":
+        roomx = roomx + 1
+        x3y5()
+    else:
+        what()
+        print('')
+        x2y5()
+
+def x3y5():
+    #mistroom 2
+    global roomx
+    global roomy
+
+    combat()
+
+    do = input("""The western doorway collapses, the mist is significantly thicker, you can only go east.
+east? """)
+    print('')
+    
+    if do == "east":
+        roomx = roomx + 1
+        x4y5()
+    else:
+        what()
+        print('')
+        x3y5()
+
+def x4y5():
+    #mistroom 3
+    global roomx
+    global roomy
+
+    combat()
+
+    do = input("""The western doorway collapses, the mist almost blinds you, you can only go south.
+south? """)
+    print('')
+    
+    if do == "south":
+        roomy = roomy - 1
+        x4y4()
+    else:
+        what()
+        print('')
+        x4y5()
+
+def x4y4():
+    #mistroom 4
+    global roomx
+    global roomy
+
+    combat()
+
+    do = input("""The northern doorway collapses, a chill surges through you, you can only go east.
+east? """)
+    print('')
+    
+    if do == "east":
+        roomx = roomx + 1
+        x5y4()
+    else:
+        what()
+        print('')
+        x4y4()
+
+def x4y4():
+    #mistroom 5
+    global roomx
+    global roomy
+
+    combat()
+
+    do = input("""The western doorway collapses. you dont want to, but you can only go north.
+north? """)
+    print('')
+    
+    if do == "north":
+        roomy = roomy + 1
+        x5y5()
+    else:
+        what()
+        print('')
+        x5y4()
+
+def x5y5():
+    #Final Room
+    global roomx
+    global roomy
+
+    combat()
+
+
 def combat():
     global roomx
     global roomy
@@ -421,7 +675,10 @@ def combat():
         o = True
     else:
         o = False
-    
+    if roomy == 5:
+        o = False
+    if roomx > 3 and roomy > 3:
+        o = True
     damage = 0
     spell = ''
     if ehp < 1 and o == True:
@@ -435,14 +692,20 @@ def combat():
         elif roomx+roomy < 8:
             print("You hear breathing behind you.")
             enemy = "Troll"
-        elif roomx+roomy < 10:
+        elif roomx+roomy == 9 or roomx+roomy == 8 and roomx > 3 and roomy > 3:
             print("A cold stare peirces your soul.")
             enemy = "Eldritch Guardian"
         elif roomx+roomy == 10:
             print("You become overwhelmed with dread.")
             enemy = "Eldritch Horror"
+            mp = 250
+            hp = 100
             
         ehp = (roomx*roomy*8)
+        if roomx + roomy < 10 and roomx > 3 and roomy > 3:
+            ehp = 200
+        if roomx + roomy == 10:
+            ehp = 1000
         print ('')
         sleep(.5)
         print(enemy, "attacks!")
@@ -503,6 +766,8 @@ def combat():
         if y < 5:
             if ehp > 0:
                 edamage = randint(roomx*2+roomy*2,roomx*5+roomy*5)
+                if roomx + roomy == 10:
+                    edamage = randint(25, 75)
                 if shield > 0:
                     shield = shield - edamage
                     if shield > 0:
@@ -533,7 +798,39 @@ def combat():
             combat()
         elif ehp < 1:
             print(enemy, "was slain!")
-
+            if enemy == "Eldritch Guardian":
+                print("Max Mp increased to:", maxmp+50)
+                maxmp = maxmp + 50
+            elif enemy == "Eldritch Horror":
+                print('')
+                sleep(1)
+                print("As the last sliver of life ebbs out of the Eldritch Horror, the northern wall is destroyed by a beam of light.")
+                print('')
+                sleep(1)
+                print("You walk out, the blue sky is above you, the sun's heat warming the chill that hung over your soul.")
+                print('')
+                sleep(2)
+                print("You are free.")
+                print('')
+                sleep(2)
+                print("""
+                                    =========
+                                     YOU WIN
+                                    =========""")
+                print('')
+                sleep(3)
+                print("Credits:")
+                print("everything - Calum Pallister")
+                print('')
+                sleep(2)
+                print("Special thanks to:")
+                print("Luke Briggs, Harry Reed & Issac Douglas")
+                print('')
+                sleep(2)
+                print("Thank you for playing!")
+                sleep(3)
+                quit
+                
 def coridoor():
     global hp
     
@@ -543,7 +840,7 @@ def coridoor():
 
     elif hp == 75:
 
-        do = input("The walls now have small splatters of blood upon them... Do you proceed? ")
+        do = input("Voices whisper within the depths... Do you proceed? ")
 
     elif hp == 50:
 
@@ -615,11 +912,11 @@ def coridoor():
 """)
             print("Feelings lost and taken away,")
             sleep(1.5)
-            print("Reaching out this fateful day,")
+            print("Though still alive this fateful day,")
             sleep(1.5)
             print("Sudden pain within your veins,")
             sleep(1.5)
-            print("Bursting, causing large red stains,")
+            print("Bursting, causing dark red stains,")
             sleep(1.5)
             print("He speaks of words with unknown meaning,")
             sleep(1.5)
