@@ -209,7 +209,7 @@ def x1y2():
     global roomy
 
     do = input("""There are doorways south, north and east, a note on the floor depicts a creature that is soul-peircingly grotesque;
-in blood is written the words 'Eldritch Horror', you think that escaping this place is probably a good idea...
+in blood is written the words: 'Eldritch Horror'. You think that escaping this place is probably a good idea...
 east, north or south? """)
     print('')
 
@@ -254,7 +254,7 @@ def x3y2():
     combat()
     
     do = input("""Within this room are 3 doorways, one west, east, and north.
-west, east or north? """)
+west or east? """)
     print('')
     if do == "west":
         roomx = roomx - 1
@@ -376,7 +376,7 @@ north or south? """)
         x5y3()
     elif do == "south":
         roomy = roomy - 1
-        x5y3()
+        x5y1()
     else:
         what()
         print('')
@@ -397,7 +397,7 @@ west or south? """)
         x4y3()
     elif do == "south":
         roomy = roomy - 1
-        x4y3()
+        x5y2()
     else:
         what()
         print('')
@@ -527,7 +527,7 @@ north? """)
         print('')
         x2y3()
 
-def x5y1():
+def x1y5():
     #well
     global roomx
     global roomy
@@ -542,19 +542,19 @@ heal, east? """)
 
     if do == "east":
         roomx = roomx + 1
-        x5y2()
+        x2y5()
 
     elif do == "heal":
         hp = maxhp
         mp = maxmp
         print("Health and mana restored")
         print('')
-        x5y1()
+        x1y5()
 
     else:
         what()
         print('')
-        x5y1()
+        x1y5()
 
 def x2y5():
     #mistroom 1
@@ -669,7 +669,7 @@ def combat():
     global maxmp
     global enemy
     global ehp
-
+    game = ''
     e = randint(1,5)
     if e > 3:
         o = True
@@ -689,10 +689,7 @@ def combat():
         elif roomx+roomy < 6:
             print("Something lurks in the darkness.")
             enemy = "Orc"
-        elif roomx+roomy < 8:
-            print("You hear breathing behind you.")
-            enemy = "Troll"
-        elif roomx+roomy == 9 or roomx+roomy == 8 and roomx > 3 and roomy > 3:
+        elif roomx == 4 and roomy == 5 or roomx == 4 and roomy == 4 or roomx == 5 and roomy == 4:
             print("A cold stare peirces your soul.")
             enemy = "Eldritch Guardian"
         elif roomx+roomy == 10:
@@ -700,6 +697,9 @@ def combat():
             enemy = "Eldritch Horror"
             mp = 250
             hp = 100
+        else:
+            print("You hear breathing behind you.")
+            enemy = "Troll"
             
         ehp = (roomx*roomy*8)
         if roomx + roomy < 10 and roomx > 3 and roomy > 3:
@@ -749,7 +749,7 @@ def combat():
                 combat()
                       
         elif do == "shield":
-            if mp - (((roomx+roomy)*10)//4) > 0:
+            if mp - (roomx+roomy)//4 > 0:
                 shield = (roomx+roomy)*10
                 mp = mp - shield//4
                 print("You project an arcane barrier that will absorb",shield, "damage.")
@@ -791,12 +791,14 @@ def combat():
                                        =========
                                        GAME OVER
                                        =========""")
-            sleep(2)
-            quit
-        if ehp > 0 and hp > 0:
+            game = "over"
+            if game == "over":
+                sleep(2)
+                quit()
+        elif ehp > 0 and hp > 0 and game == '':
             sleep(0.5)
             combat()
-        elif ehp < 1:
+        elif ehp < 1 and game == '':
             print(enemy, "was slain!")
             if enemy == "Eldritch Guardian":
                 print("Max Mp increased to:", maxmp+50)
@@ -829,11 +831,11 @@ def combat():
                 sleep(2)
                 print("Thank you for playing!")
                 sleep(3)
-                quit
+                quit()
                 
 def coridoor():
     global hp
-    
+    game = ''
     if hp == 100:
 
         do = input("You enter a long dark hallway. Do you proceed? yes or no? ")
@@ -856,6 +858,7 @@ def coridoor():
         hp = hp - 25
         if hp < 1:
             print("""
+
 
 
 
@@ -976,18 +979,17 @@ def coridoor():
 
 
 
-
-
 """)
             print("""
                                     =========
                                     GAME OVER
                                     =========""")
             sleep(2)
-            quit
-        else:
+            game = "over"
+            quit()
+        elif hp > 0:
             coridoor()
-    else:
+    elif game == '':
         hp = 100
         x4y1()
 
