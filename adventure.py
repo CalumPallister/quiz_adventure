@@ -571,9 +571,9 @@ east? """)
         roomx = roomx + 1
         x3y5()
     else:
-        what()
+        print("You try to do something else, but you are pushed into the next room by an unseen force")
         print('')
-        x2y5()
+        x3y5()
 
 def x3y5():
     #mistroom 2
@@ -590,9 +590,9 @@ east? """)
         roomx = roomx + 1
         x4y5()
     else:
-        what()
+        print("You try to do something else, but you are pushed into the next room by an unseen force")
         print('')
-        x3y5()
+        x4y5()
 
 def x4y5():
     #mistroom 3
@@ -609,9 +609,9 @@ south? """)
         roomy = roomy - 1
         x4y4()
     else:
-        what()
+        print("You try to do something else, but you are pushed into the next room by an unseen force")
         print('')
-        x4y5()
+        x4y4()
 
 def x4y4():
     #mistroom 4
@@ -628,9 +628,9 @@ east? """)
         roomx = roomx + 1
         x5y4()
     else:
-        what()
+        print("You try to do something else, but you are pushed into the next room by an unseen force")
         print('')
-        x4y4()
+        x5y4()
 
 def x4y4():
     #mistroom 5
@@ -647,9 +647,9 @@ north? """)
         roomy = roomy + 1
         x5y5()
     else:
-        what()
+        print("You try to do something else, but you are pushed into the next room by an unseen force")
         print('')
-        x5y4()
+        x5y5()
 
 def x5y5():
     #Final Room
@@ -657,7 +657,6 @@ def x5y5():
     global roomy
 
     combat()
-
 
 def combat():
     global roomx
@@ -670,50 +669,50 @@ def combat():
     global enemy
     global ehp
     game = ''
+    o = False
     e = randint(1,5)
     if e > 3:
         o = True
-    else:
+    elif e < 4:
         o = False
-    if roomy == 5:
+    elif roomy == 5:
         o = False
-    if roomx > 3 and roomy > 3:
+    elif roomx+roomy == 9 or roomx + roomy == 10 or (roomx == 4 and roomy == 4):
         o = True
     damage = 0
     spell = ''
-    if ehp < 1 and o == True:
-        shield = 0
-        if roomx+roomy < 4:
-            print("An unerving chill sweeps through your body.")
-            enemy = "Goblin"
-        elif roomx+roomy < 6:
-            print("Something lurks in the darkness.")
-            enemy = "Orc"
-        elif roomx == 4 and roomy == 5 or roomx == 4 and roomy == 4 or roomx == 5 and roomy == 4:
-            print("A cold stare peirces your soul.")
-            enemy = "Eldritch Guardian"
-        elif roomx+roomy == 10:
-            print("You become overwhelmed with dread.")
-            enemy = "Eldritch Horror"
-            mp = 250
-            hp = 100
-        else:
-            print("You hear breathing behind you.")
-            enemy = "Troll"
-            
-        ehp = (roomx*roomy*8)
-        if roomx + roomy < 10 and roomx > 3 and roomy > 3:
-            ehp = 200
-        if roomx + roomy == 10:
-            ehp = 1000
-        print ('')
-        sleep(.5)
-        print(enemy, "attacks!")
-        combat()
-        print('')
-        
-    elif ehp > 0:
 
+    ehp = (roomx*roomy*8)
+    if roomx + roomy == 9 or (roomx == 4 and roomy == 4):
+        ehp = 200
+    if roomx + roomy == 10:
+        ehp = 1000 
+    
+    shield = 0
+    if roomx+roomy < 4:
+        print("An unerving chill sweeps through your body.")
+        enemy = "Goblin"
+    elif roomx+roomy < 6:
+        print("Something lurks in the darkness.")
+        enemy = "Orc"
+    elif roomx+roomy == 9 or (roomx == 4 and roomy == 4) :
+        print("A cold stare peirces your soul.")
+        enemy = "Eldritch Guardian"
+    elif roomx+roomy == 10:
+        print("You become overwhelmed with dread.")
+        enemy = "Eldritch Horror"
+        mp = 250
+        hp = 100
+    else:
+        print("You hear breathing behind you.")
+        enemy = "Troll"
+            
+    print ('')
+    sleep(.5)
+    print(enemy, "attacks!")
+    print('')
+        
+    while ehp > 0 and hp > 0:
         print("Player hp:", hp,"Player mp:", mp,"Barrier hp:", shield, "Enemy hp:", ehp)
         print('')
         
@@ -746,7 +745,6 @@ def combat():
             else:
                 print("Not enough mp!")
                 print('')
-                combat()
                       
         elif do == "shield":
             if mp - (roomx+roomy)//4 > 0:
@@ -756,82 +754,81 @@ def combat():
             else:
                 print("Not enough mp!")
                 print('')
-                combat()
+                
         else:
             what()
             print('')
-            combat()
 
-        y = randint(1,5)
-        if y < 5:
-            if ehp > 0:
-                edamage = randint(roomx*2+roomy*2,roomx*5+roomy*5)
-                if roomx + roomy == 10:
-                    edamage = randint(25, 75)
-                if shield > 0:
-                    shield = shield - edamage
+        if do == "shield" or do == "spell" or do == "attack":
+            y = randint(1,5)
+            if y < 5:
+                if ehp > 0:
+                    edamage = randint(roomx*2+roomy*2,roomx*5+roomy*5)
+                    if roomx + roomy == 10:
+                        edamage = randint(25, 75)
                     if shield > 0:
-                        print("Your arcane barrier received", edamage,"damage!")
+                        shield = shield - edamage
+                        if shield > 0:
+                            print("Your arcane barrier received", edamage,"damage!")
+                        else:
+                            shield = 0
+                            print("Your arcane barrier was destroyed!")
                     else:
-                        shield = 0
-                        print("Your arcane barrier was destroyed!")
-                else:
-                    hp = hp - edamage
-                    print("You received",edamage,"damage!")
-        else:
-            if ehp > 0:
-                regain = roomx+roomy+ehp//10
-                ehp = ehp + regain
-                print(enemy,"gained", regain,"hp!")
+                        hp = hp - edamage
+                        print("You received",edamage,"damage!")
+            else:
+                if ehp > 0:
+                    regain = roomx+roomy+ehp//10
+                    ehp = ehp + regain
+                    print(enemy,"gained", regain,"hp!")
             
-
-        if hp < 1:
-            print('')
-            print("""
-                                       =========
-                                       GAME OVER
-                                       =========""")
-            game = "over"
-            if game == "over":
-                sleep(2)
-                quit()
-        elif ehp > 0 and hp > 0 and game == '':
-            sleep(0.5)
-            combat()
-        elif ehp < 1 and game == '':
-            print(enemy, "was slain!")
-            if enemy == "Eldritch Guardian":
-                print("Max Mp increased to:", maxmp+50)
-                maxmp = maxmp + 50
-            elif enemy == "Eldritch Horror":
-                print('')
-                sleep(1)
-                print("As the last sliver of life ebbs out of the Eldritch Horror, the northern wall is destroyed by a beam of light.")
-                print('')
-                sleep(1)
-                print("You walk out, the blue sky is above you, the sun's heat warming the chill that hung over your soul.")
-                print('')
-                sleep(2)
-                print("You are free.")
-                print('')
-                sleep(2)
-                print("""
+                
+    if hp < 1:
+        print('')
+        print("""
                                     =========
-                                     YOU WIN
+                                    GAME OVER
                                     =========""")
-                print('')
-                sleep(3)
-                print("Credits:")
-                print("everything - Calum Pallister")
-                print('')
-                sleep(2)
-                print("Special thanks to:")
-                print("Luke Briggs, Harry Reed & Issac Douglas")
-                print('')
-                sleep(2)
-                print("Thank you for playing!")
-                sleep(3)
-                quit()
+
+    elif ehp < 1:
+        endcombat()
+
+def endcombat():
+    print(enemy, "was slain!")
+    print('')
+        
+    if enemy == "Eldritch Guardian":
+        print("Max Mp increased to:", maxmp+50)
+        maxmp = maxmp + 50
+    elif enemy == "Eldritch Horror":
+        print('')
+        sleep(1)
+        print("As the last sliver of life ebbs out of the Eldritch Horror, the northern wall is destroyed by a beam of light.")
+        print('')
+        sleep(1)
+        print("You walk out, the blue sky is above you, the sun's heat warming the chill that was hung over your soul.")
+        print('')
+        sleep(2)
+        print("You are free.")
+        print('')
+        sleep(2)
+        print("""
+                                   =========
+                                    YOU WIN
+                                   =========""")
+        print('')
+        sleep(3)
+        print("Credits:")
+        print("everything - Calum Pallister")
+        print('')
+        sleep(2)
+        print("Special thanks to:")
+        print("Luke Briggs, Harry Reed & Issac Douglas")
+        print('')
+        sleep(2)
+        print("Thank you for playing!")
+        sleep(3)
+        quit()    
                 
 def coridoor():
     global hp
@@ -857,69 +854,15 @@ def coridoor():
     if do == "yes":
         hp = hp - 25
         if hp < 1:
-            print("""
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-""")
+            print("n/"*50)
+            
             print("Feelings lost and taken away,")
             sleep(1.5)
             print("Though still alive this fateful day,")
             sleep(1.5)
             print("Sudden pain within your veins,")
             sleep(1.5)
-            print("Bursting, causing dark red stains,")
+            print("Bursting, spouting dark red stains,")
             sleep(1.5)
             print("He speaks of words with unknown meaning,")
             sleep(1.5)
@@ -927,59 +870,7 @@ def coridoor():
             sleep(1.5)
             print("From knowledge gained while dreaming.")
             sleep(3)
-            print("""
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-""")
+            print("n/"*50)
             print("""
                                     =========
                                     GAME OVER
@@ -992,6 +883,7 @@ def coridoor():
     elif game == '':
         hp = 100
         x4y1()
+
 
 # Leave this at the bottom - it makes start run automatically when you
 # run your code.
