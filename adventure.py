@@ -760,28 +760,7 @@ def combat():
             print('')
 
         if do == "shield" or do == "spell" or do == "attack":
-            y = randint(1,5)
-            if y < 5:
-                if ehp > 0:
-                    edamage = randint(roomx*2+roomy*2,roomx*5+roomy*5)
-                    if roomx + roomy == 10:
-                        edamage = randint(25, 75)
-                    if shield > 0:
-                        shield = shield - edamage
-                        if shield > 0:
-                            print("Your arcane barrier received", edamage,"damage!")
-                        else:
-                            shield = 0
-                            print("Your arcane barrier was destroyed!")
-                    else:
-                        hp = hp - edamage
-                        print("You received",edamage,"damage!")
-            else:
-                if ehp > 0:
-                    regain = roomx+roomy+ehp//10
-                    ehp = ehp + regain
-                    print(enemy,"gained", regain,"hp!")
-            
+            enemyattack()                
                 
     if hp < 1:
         print('')
@@ -793,13 +772,66 @@ def combat():
     elif ehp < 1:
         endcombat()
 
+def enemyattack():
+    if enemy != "Eldritch guardian" or enemy != "Eldritch horror":
+        y = randint(1,5)
+        if y < 5:
+            if ehp > 0:
+                edamage = randint(roomx*2+roomy*2,roomx*5+roomy*5)
+                if roomx + roomy == 10:
+                    edamage = randint(25, 75)
+                if shield > 0:
+                    shield = shield - edamage
+                    if shield > 0:
+                        print("Your arcane barrier received", edamage,"damage!")
+                    else:
+                        shield = 0
+                        print("Your arcane barrier was destroyed!")
+                else:
+                    hp = hp - edamage
+                    print("You received",edamage,"damage!")
+        else:
+            if ehp > 0:
+                regain = roomx+roomy+ehp//10
+                ehp = ehp + regain
+                print(enemy,"gained", regain,"hp!")
+            
+    else:
+        y = randint(1,10)
+        if y < 9:
+            if ehp > 0:
+                edamage = randint(roomx*2+roomy*2,roomx*5+roomy*5)
+                if roomx + roomy == 10:
+                    edamage = randint(25, 75)
+                if shield > 0:
+                    shield = shield - edamage
+                    if shield > 0:
+                        print("Your arcane barrier received", edamage,"damage!")
+                    else:
+                        shield = 0
+                        print("Your arcane barrier was destroyed!")
+                else:
+                    hp = hp - edamage
+                    print("You received",edamage,"damage!")
+        else:
+            if ehp > 0:
+                regain = roomx+roomy+ehp//20
+                ehp = ehp + regain
+                print(enemy,"gained", regain,"hp!")
+
 def endcombat():
+    global hp
+    global mp
+    global maxmp
     print(enemy, "was slain!")
     print('')
         
     if enemy == "Eldritch Guardian":
         print("Max Mp increased to:", maxmp+50)
         maxmp = maxmp + 50
+        print("Health and mana restored.")
+        hp = 100
+        mp = maxmp
     elif enemy == "Eldritch Horror":
         print('')
         sleep(1)
