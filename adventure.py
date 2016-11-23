@@ -143,10 +143,12 @@ heal, north or east? """)
 
     if do == "north":
         roomy = roomy + 1
+        combat()
         x1y2()
 
     elif do == "east":
         roomx = roomx + 1
+        combat()
         x2y1()
 
     elif do == "heal":
@@ -166,8 +168,6 @@ def x2y1():
     #combat room
     global roomx
     global roomy
-    
-    combat()
 
     do = input("""Within this room are 2 doorways, one west, the other east.
 west or east? """)
@@ -178,6 +178,7 @@ west or east? """)
         x1y1()
     elif do == "east":
         roomx = roomx + 1
+        combat()
         x3y1()
     else:
         what()
@@ -189,14 +190,13 @@ def x3y1():
     global roomx
     global roomy
 
-    combat()
-
     do = input("""The way ahead is blocked by fallen rubble, broken bones litter the floor, you should probably go back.
 west? """)
     print('')
     
     if do == "west":
         roomx = roomx - 1
+        combat()
         x2y1()
     else:
         what()
@@ -218,9 +218,11 @@ east, north or south? """)
         x1y1()
     elif do == "north":
         roomy = roomy + 1
+        combat()
         x1y3()
     elif do == "east":
         roomx = roomx + 1
+        combat()
         x2y2()
     else:
         what()
@@ -231,16 +233,16 @@ def x2y2():
     global roomx
     global roomy
 
-    combat()
-    
     do = input("""Within this room are 2 doorways, one west, the other east as well as a skeleton hanging from the ceiling.
 west or east? """)
     print('')
     if do == "west":
         roomx = roomx - 1
+        combat()
         x1y2()
     elif do == "east":
         roomx = roomx + 1
+        combat()
         x3y2()
     else:
         what()
@@ -251,16 +253,16 @@ def x3y2():
     global roomx
     global roomy
 
-    combat()
-    
     do = input("""Within this room are 3 doorways, one west, east, and north.
 west or east? """)
     print('')
     if do == "west":
         roomx = roomx - 1
+        combat()
         x2y2()
     elif do == "east":
         roomx = roomx + 1
+        combat()
         x4y2()
     else:
         what()
@@ -272,13 +274,12 @@ def x1y3():
     global roomx
     global roomy
 
-    combat()
-    
     do = input("""There is a doorway to the south, as well as unintelligable writing on the walls.
 south? """)
     print('')
     if do == "south":
         roomy = roomy - 1
+        combat()
         x1y2()
     else:
         what()
@@ -290,14 +291,13 @@ def x4y2():
     global roomx
     global roomy
     global hp
-    
-    combat()
-    
+
     do = input("""There are 2 doorways, one west, the other south; blood stains the south doorway.
 west or south? """)
     print('')
     if do == "west":
         roomx = roomx - 1
+        combat()
         x3y2()
     elif do == "south":
         roomy == roomy - 1
@@ -314,14 +314,13 @@ def x4y1():
     global roomx
     global roomy
     global hp
-    
-    combat()
-    
+
     do = input("""There are 2 blocked doorways, and an accessable one is to the east, where a faint blue glow is emitted from within.
 east? """)
     print('')
     if do == "east":
         roomx = roomx + 1
+        combat()
         x5y1()
     else:
         what()
@@ -343,10 +342,12 @@ heal, north or west? """)
 
     if do == "north":
         roomy = roomy + 1
+        combat()
         x5y2()
 
     elif do == "west":
         roomx = roomx - 1
+        combat()
         x4y1()
 
     elif do == "heal":
@@ -365,14 +366,13 @@ def x5y2():
     global roomx
     global roomy
     global hp
-    
-    combat()
-    
+
     do = input("""There are 2 doorways, one is to the north and another to the south, a bloody skull is embedded in the west wall.
 north or south? """)
     print('')
     if do == "north":
         roomy = roomy + 1
+        combat()
         x5y3()
     elif do == "south":
         roomy = roomy - 1
@@ -387,16 +387,16 @@ def x5y3():
     global roomy
     global hp
     
-    combat()
-    
     do = input("""There is a doorway to the west and another to the south, a faint grey mist emerges through a crack in the north wall.
 west or south? """)
     print('')
     if do == "west":
         roomx = roomx - 1
+        combat()
         x4y3()
     elif do == "south":
         roomy = roomy - 1
+        combat()
         x5y2()
     else:
         what()
@@ -407,17 +407,17 @@ def x4y3():
     global roomx
     global roomy
     global hp
-    
-    combat()
-    
+
     do = input("""There are two doorways to the west and east, a note depicts a large hooded creature, in blood is writen: Eldritch Guardian.
 west or east? """)
     print('')
     if do == "west":
         roomx = roomx - 1
+        combat()
         x3y3()
     elif do == "east":
         roomx = roomx + 1
+        combat()
         x5y3()
     else:
         what()
@@ -428,17 +428,17 @@ def x3y3():
     global roomx
     global roomy
     global hp
-    
-    combat()
-    
+
     do = input("""There are doorways to the north and east, this room seems colder than the others.
 north or east? """)
     print('')
     if do == "north":
         roomy = roomy + 1
+        combat()
         x3y4()
     elif do == "east":
         roomx = roomx + 1
+        combat()
         x4y3()
     else:
         what()
@@ -449,17 +449,17 @@ def x3y4():
     global roomx
     global roomy
     global hp
-    
-    combat()
-    
+
     do = input("""There are doorways to the south and west.
 south or west? """)
     print('')
     if do == "south":
         roomy = roomy - 1
+        combat()
         x3y3()
     elif do == "west":
         roomx = roomx - 1
+        combat()
         x2y4()
     else:
         what()
@@ -470,17 +470,17 @@ def x2y4():
     global roomx
     global roomy
     global hp
-    
-    combat()
-    
+
     do = input("""There are doorways to the south and west, the eastern doorway has collapsed.
 south or west? """)
     print('')
     if do == "south":
         roomy = roomy - 1
+        combat()
         x2y3()
     elif do == "west":
         roomx = roomx - 1
+        combat()
         x1y4()
     else:
         what()
@@ -491,9 +491,7 @@ def x1y4():
     global roomx
     global roomy
     global hp
-    
-    combat()
-    
+
     do = input("""There is a doorway to the east and to the north, where a faint blue glow is emitted from within.
 north or east? """)
     print('')
@@ -502,6 +500,7 @@ north or east? """)
         x1y5()
     elif do == "east":
         roomx = roomx + 1
+        combat()
         x1y4()
     else:
         what()
@@ -513,14 +512,13 @@ def x2y3():
     global roomx
     global roomy
 
-    combat()
-
     do = input("""There is nothing in this room other than a pile of bones, you should probably go back.
 north? """)
     print('')
     
     if do == "north":
         roomy = roomy + 1
+        combat()
         x2y4()
     else:
         what()
@@ -542,6 +540,7 @@ heal, east? """)
 
     if do == "east":
         roomx = roomx + 1
+        combat()
         x2y5()
 
     elif do == "heal":
@@ -561,18 +560,19 @@ def x2y5():
     global roomx
     global roomy
 
-    combat()
-
     do = input("""The western doorway collapses, a faint mist pours through the eastern doorway.
 east? """)
     print('')
     
     if do == "east":
         roomx = roomx + 1
+        combat()
         x3y5()
     else:
         print("You try to do something else, but you are pushed into the next room by an unseen force")
         print('')
+        roomx = roomx + 1
+        combat()
         x3y5()
 
 def x3y5():
@@ -580,18 +580,18 @@ def x3y5():
     global roomx
     global roomy
 
-    combat()
-
     do = input("""The western doorway collapses, the mist is significantly thicker, you can only go east.
 east? """)
     print('')
     
     if do == "east":
         roomx = roomx + 1
+        combat()
         x4y5()
     else:
         print("You try to do something else, but you are pushed into the next room by an unseen force")
         print('')
+        combat()
         x4y5()
 
 def x4y5():
@@ -599,18 +599,19 @@ def x4y5():
     global roomx
     global roomy
 
-    combat()
-
     do = input("""The western doorway collapses, the mist almost blinds you, you can only go south.
 south? """)
     print('')
     
     if do == "south":
         roomy = roomy - 1
+        combat()
         x4y4()
     else:
         print("You try to do something else, but you are pushed into the next room by an unseen force")
         print('')
+        roomy = roomy - 1
+        combat()
         x4y4()
 
 def x4y4():
@@ -618,18 +619,19 @@ def x4y4():
     global roomx
     global roomy
 
-    combat()
-
     do = input("""The northern doorway collapses, a chill surges through you, you can only go east.
 east? """)
     print('')
     
     if do == "east":
         roomx = roomx + 1
+        combat()
         x5y4()
     else:
         print("You try to do something else, but you are pushed into the next room by an unseen force")
         print('')
+        roomx = roomx + 1
+        combat()
         x5y4()
 
 def x4y4():
@@ -637,26 +639,25 @@ def x4y4():
     global roomx
     global roomy
 
-    combat()
-
     do = input("""The western doorway collapses. you dont want to, but you can only go north.
 north? """)
     print('')
     
     if do == "north":
         roomy = roomy + 1
+        combat()
         x5y5()
     else:
         print("You try to do something else, but you are pushed into the next room by an unseen force")
         print('')
+        roomx = roomy + 1
+        combat()
         x5y5()
 
 def x5y5():
     #Final Room
     global roomx
     global roomy
-
-    combat()
 
 def combat():
     global roomx
@@ -681,98 +682,102 @@ def combat():
         o = True
     damage = 0
     spell = ''
-
-    ehp = (roomx*roomy*8)
-    if roomx + roomy == 9 or (roomx == 4 and roomy == 4):
-        ehp = 200
-    if roomx + roomy == 10:
-        ehp = 1000 
-    
-    shield = 0
-    if roomx+roomy < 4:
-        print("An unerving chill sweeps through your body.")
-        enemy = "Goblin"
-    elif roomx+roomy < 6:
-        print("Something lurks in the darkness.")
-        enemy = "Orc"
-    elif roomx+roomy == 9 or (roomx == 4 and roomy == 4) :
-        print("A cold stare peirces your soul.")
-        enemy = "Eldritch Guardian"
-    elif roomx+roomy == 10:
-        print("You become overwhelmed with dread.")
-        enemy = "Eldritch Horror"
-        mp = 250
-        hp = 100
-    else:
-        print("You hear breathing behind you.")
-        enemy = "Troll"
-            
-    print ('')
-    sleep(.5)
-    print(enemy, "attacks!")
-    print('')
+    if o == True:
+        ehp = (roomx*roomy*8)
+        if roomx + roomy == 9 or (roomx == 4 and roomy == 4):
+            ehp = 200
+        if roomx + roomy == 10:
+            ehp = 1000 
         
-    while ehp > 0 and hp > 0:
-        print("Player hp:", hp,"Player mp:", mp,"Barrier hp:", shield, "Enemy hp:", ehp)
-        print('')
-        
-        do = input("use attack, spell or shield? ")
-        print('')
-        
-        if do == "attack":
-            damage = (randint(roomx+roomy, roomx+roomy+10))
-            
-            print('You attack the', enemy, 'and deal',damage, "damage.")
-            ehp = ehp - damage
-            
-        elif do == "spell":
-
-            x = randint(1, 4)
-            if x == 1:
-                spell = "fireball"
-            elif x == 2:
-                spell = "frost bolt"
-            elif x == 3:
-                spell = "lightning"
-            elif x == 4:
-                spell = "purify"
-
-            damage = randint(roomx+roomy, (roomx*10 + roomy*10)//2)
-            if mp - (roomx+roomy) > 0:
-                print("You cast", spell, "on the", enemy, "and deal",damage,"damage.")
-                ehp = ehp - damage
-                mp = mp - (damage // 2)
-            else:
-                print("Not enough mp!")
-                print('')
-                      
-        elif do == "shield":
-            if mp - (roomx+roomy)//4 > 0:
-                shield = (roomx+roomy)*10
-                mp = mp - shield//4
-                print("You project an arcane barrier that will absorb",shield, "damage.")
-            else:
-                print("Not enough mp!")
-                print('')
-                
+        shield = 0
+        if roomx+roomy < 4:
+            print("An unerving chill sweeps through your body.")
+            enemy = "Goblin"
+        elif roomx+roomy < 6:
+            print("Something lurks in the darkness.")
+            enemy = "Orc"
+        elif roomx+roomy == 9 or (roomx == 4 and roomy == 4) :
+            print("A cold stare peirces your soul.")
+            enemy = "Eldritch Guardian"
+        elif roomx+roomy == 10:
+            print("You become overwhelmed with dread.")
+            enemy = "Eldritch Horror"
+            mp = 250
+            hp = 100
         else:
-            what()
-            print('')
-
-        if do == "shield" or do == "spell" or do == "attack":
-            enemyattack()                
+            print("You hear breathing behind you.")
+            enemy = "Troll"
                 
-    if hp < 1:
+        print ('')
+        sleep(.5)
+        print(enemy, "attacks!")
         print('')
-        print("""
-                                    =========
-                                    GAME OVER
-                                    =========""")
+            
+        while ehp > 0 and hp > 0:
+            print("Player hp:", hp,"Player mp:", mp,"Barrier hp:", shield, "Enemy hp:", ehp)
+            print('')
+            
+            do = input("use attack, spell or shield? ")
+            print('')
+            
+            if do == "attack":
+                damage = (randint(roomx+roomy, roomx+roomy+10))
+                
+                print('You attack the', enemy, 'and deal',damage, "damage.")
+                ehp = ehp - damage
+                
+            elif do == "spell":
 
-    elif ehp < 1:
-        endcombat()
+                x = randint(1, 4)
+                if x == 1:
+                    spell = "fireball"
+                elif x == 2:
+                    spell = "frost bolt"
+                elif x == 3:
+                    spell = "lightning"
+                elif x == 4:
+                    spell = "purify"
+
+                damage = randint(roomx+roomy, (roomx*10 + roomy*10)//2)
+                if mp - (roomx+roomy) > 0:
+                    print("You cast", spell, "on the", enemy, "and deal",damage,"damage.")
+                    ehp = ehp - damage
+                    mp = mp - (damage // 2)
+                else:
+                    print("Not enough mp!")
+                    print('')
+                          
+            elif do == "shield":
+                if mp - (roomx+roomy)//4 > 0:
+                    shield = (roomx+roomy)*10
+                    mp = mp - shield//4
+                    print("You project an arcane barrier that will absorb",shield, "damage.")
+                else:
+                    print("Not enough mp!")
+                    print('')
+                    
+            else:
+                what()
+                print('')
+
+            if do == "shield" or do == "spell" or do == "attack":
+                enemyattack()                
+                    
+        if hp < 1:
+            print('')
+            print("""
+                                        =========
+                                        GAME OVER
+                                        =========""")
+
+        elif ehp < 1:
+            endcombat()
 
 def enemyattack():
+    global hp
+    global shield
+    global ehp
+    global enemy
     if enemy != "Eldritch guardian" or enemy != "Eldritch horror":
         y = randint(1,5)
         if y < 5:
