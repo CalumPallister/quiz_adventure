@@ -253,7 +253,7 @@ def x3y2():
     global roomx
     global roomy
 
-    do = input("""Within this room are 3 doorways, one west, east, and north.
+    do = input("""Within this room are 2 doorways, one west, and east.
 west or east? """)
     print('')
     if do == "west":
@@ -749,8 +749,8 @@ def combat():
                           
             elif do == "shield":
                 if mp - (roomx+roomy)//4 > 0:
-                    shield = (roomx+roomy)*10
-                    mp = mp - shield//4
+                    shield = (roomx*roomy))*10
+                    mp = mp - shield//6
                     print("You project an arcane barrier that will absorb",shield, "damage.")
                 else:
                     print("Not enough mp!")
@@ -764,11 +764,13 @@ def combat():
                 enemyattack()                
                     
         if hp < 1:
-            print('')
+            print("n/"*50)
             print("""
                                         =========
                                         GAME OVER
                                         =========""")
+            sleep(2)
+            quit()
 
         elif ehp < 1:
             endcombat()
@@ -779,8 +781,8 @@ def enemyattack():
     global ehp
     global enemy
     if enemy != "Eldritch guardian" or enemy != "Eldritch horror":
-        y = randint(1,5)
-        if y < 5:
+        y = randint(1,10)
+        if y < 9:
             if ehp > 0:
                 edamage = randint(roomx*2+roomy*2,roomx*5+roomy*5)
                 if roomx + roomy == 10:
@@ -802,8 +804,8 @@ def enemyattack():
                 print(enemy,"gained", regain,"hp!")
             
     else:
-        y = randint(1,10)
-        if y < 9:
+        y = randint(1,20)
+        if y < 19:
             if ehp > 0:
                 edamage = randint(roomx*2+roomy*2,roomx*5+roomy*5)
                 if roomx + roomy == 10:
@@ -818,6 +820,17 @@ def enemyattack():
                 else:
                     hp = hp - edamage
                     print("You received",edamage,"damage!")
+        elif y == 19 and shield > 0:
+            edamage = shield//2
+            if shield > 0:
+                    shield = shield - edamage
+                    if shield > 0:
+                        print("Your arcane barrier was torn in half!")
+                    else:
+                        shield = 0
+                        print("Your arcane barrier was reduced to shreds!")
+            
+            
         else:
             if ehp > 0:
                 regain = roomx+roomy+ehp//20
