@@ -13,6 +13,7 @@ maxhp = 100
 maxmp = 100
 item = 0
 
+
 #combat
 ehp = 0
 enemy = ''
@@ -689,7 +690,7 @@ def combat():
             attack()                
                     
         if hp < 1:
-            print("\n"*50)
+            print("\n"*100)
             print("""
                                         =========
                                         GAME OVER
@@ -805,29 +806,31 @@ def enemyattack():
     global shield
     global ehp
     global enemy
-    if enemy == 'Paul':
+    global check_paul
+    if check_pail == 1:
         ehp = 999999999
         edamage = 999999999
         if shield > 0:
             shield = shield - edamage
             if shield > 0:
                 print("Your arcane barrier received", edamage,"damage!")
-            if shield < 1:
+            elif shield < 1:
                 shield = 0
                 print("Your arcane barrier was destroyed!")
                 sleep(5)
-            else:
-                hp = hp - edamage
-                print("You received",edamage,"damage!")
-                sleep(5)
-                print("Your body is engulfed in fire")
-                print("\n"*50)
-                print("""
+        else:
+            hp = hp - edamage
+            print("You received",edamage,"damage!")
+            sleep(2)
+            print("Your body is engulfed in fire")
+            sleep(2)
+            print("\n"*100)
+            print("""
                                         =========
                                         GAME OVER
                                         =========""")
-                sleep(2)
-                quit()
+            sleep(2)
+            quit()
                 
     elif enemy != "Paul" and ehp > 0:
         y = randint(1,10)
@@ -864,7 +867,7 @@ def checkenemy():
         print("A creature emerges from the darkness, It's head blazes with fire")
         enemy = "Paul"
         return
-    if paul != 1:
+    if check_paul != 1:
         if roomx+roomy < 4:
             print("An unerving chill sweeps through your body.")
             enemy = "Goblin"
@@ -952,6 +955,7 @@ def endcombat():
                 
 def coridoor():
     global hp
+    global check_paul
     game = ''
     if hp == 100:
         do = input("You enter a long dark hallway. Do you proceed? yes or no? ")
