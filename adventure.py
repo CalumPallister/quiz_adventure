@@ -11,6 +11,7 @@ mp = 100
 shield = 0
 maxhp = 100
 maxmp = 100
+item = 0
 
 #combat
 ehp = 0
@@ -22,6 +23,7 @@ roomy = 1
 
 #other
 count = 0
+check_paul = 0
 
 def what():
     response = ''
@@ -320,7 +322,6 @@ east? """)
     print('')
     if do == "east":
         roomx = roomx + 1
-        combat()
         x5y1()
     else:
         what()
@@ -491,7 +492,9 @@ def x1y4():
     global roomx
     global roomy
     global hp
-
+    
+    combat()
+    
     do = input("""There is a doorway to the east and to the north, where a faint blue glow is emitted from within.
 north or east? """)
     print('')
@@ -634,7 +637,7 @@ east? """)
         combat()
         x5y4()
 
-def x4y4():
+def x5y4():
     #mistroom 5
     global roomx
     global roomy
@@ -652,13 +655,7 @@ north? """)
         print('')
         roomx = roomy + 1
         combat()
-        x5y5()
-
-def x5y5():
-    #Final Room
-    global roomx
-    global roomy
-
+    
 def combat():
     global roomx
     global roomy
@@ -669,27 +666,205 @@ def combat():
     global maxmp
     global enemy
     global ehp
+    global item
     game = ''
     o = False
-    e = randint(1,5)
-    if e > 3:
+    e = randint(1,10)
+    if e > 5 or roomx+roomy == 9 or roomx + roomy == 10 or (roomx == 4 and roomy == 4):
         o = True
-    elif e < 4:
+    elif e < 7 or roomy == 5:
         o = False
-    elif roomy == 5:
-        o = False
-    elif roomx+roomy == 9 or roomx + roomy == 10 or (roomx == 4 and roomy == 4):
-        o = True
     damage = 0
     spell = ''
-    if o == True:
-        ehp = (roomx*roomy*8)
-        if roomx + roomy == 9 or (roomx == 4 and roomy == 4):
-            ehp = 200
-        if roomx + roomy == 10:
-            ehp = 1000 
+    if o == True or check_paul == 1:
+        checkenemy()
+                
+        print ('')
+        sleep(.5)
+        print(enemy, "attacks!")
+        print('')
+            
+        while ehp > 0 and hp > 0:
+                    
+            attack()                
+                    
+        if hp < 1:
+            print("\n"*50)
+            print("""
+                                        =========
+                                        GAME OVER
+                                        =========""")
+            sleep(2)
+            quit()
+
+        elif ehp < 1:
+            endcombat()
+
+def attack():
+    global item
+    global ehp
+    global mp
+    global shield
+
+    if item < 1:
+        print("Player hp:", hp,"Player mp:", mp,"Barrier hp:", shield, "Enemy hp:", ehp)
+        print('')
+    elif item > 0:
+        print("Player hp:", hp,"Player mp:", mp,"Damage boost: +", item,"Barrier hp:", shield, "Enemy hp:", ehp)
+        print('')
+    
+    do = input("use attack, spell or shield? ")
+    print('')
+            
+    if do == "attack":
+        damage = (randint(roomx+roomy, roomx+roomy+10)+item)
         
-        shield = 0
+        print('You attack the', enemy, 'and deal',damage, "damage.")
+        ehp = ehp - damage
+        
+    elif do == "spell":
+
+        x = randint(1, 4)
+        if x == 1:
+            spell = "fireball"
+        elif x == 2:
+            spell = "frost bolt"
+        elif x == 3:
+            spell = "lightning"
+        elif x == 4:
+            spell = "purify"
+
+        damage = randint(roomx+roomy, (roomx*10 + roomy*10)//2)
+        if mp - (roomx+roomy) > 0:
+            print("You cast", spell, "on the", enemy, "and deal",damage,"damage.")
+            ehp = ehp - damage
+            mp = mp - (damage // 2)
+        else:
+            print("Not enough mp!")
+            print('')
+            attack()
+                  
+    elif do == "shield":
+        if mp - (roomx+roomy)//4 > 0:
+            shield = (roomx*roomy)*10
+            mp = mp - shield//6
+            print("You project an arcane barrier that will absorb",shield, "damage.")
+        else:
+            print("Not enough mp!")
+            print('')
+            attack()
+            
+    else:
+        what()
+        print('')
+
+    if do == "shield" or do == "spell" or do == "attack":
+        if "Eldritch" in enemy:
+            eldritchattack()
+        else:
+            enemyattack()
+
+def eldritchattack():
+    global hp
+    global shield
+    global ehp
+    global enemy
+    if ehp > 0:
+        y = randint(1,20)
+        if y < 19:
+            edamage = randint(roomx*2+roomy*2,roomx*5+roomy*5)
+            if roomx + roomy == 10:
+                edamage = randint(25, 75)
+            if shield > 0:
+                shield = shield - edamage
+                if shield > 0:
+                    print("Your arcane barrier received", edamage,"damage!")
+                else:
+                    shield = 0
+                    print("Your arcane barrier was destroyed!")
+            else:
+                hp = hp - edamage
+                print("You received",edamage,"damage!")
+        elif y == 19 and shield > 0:
+            edamage = shield//2
+            if shield > 0:
+                shield = shield - edamage
+                if shield > 0:
+                    print("Your arcane barrier was torn in half!")
+                else:
+                    shield = 0
+                    print("Your arcane barrier was reduced to shreds!")
+              
+        else:
+            regain = roomx+roomy+ehp//20
+            ehp = ehp + regain
+            print(enemy,"gained", regain,"hp!")
+                
+def enemyattack():
+    global hp
+    global shield
+    global ehp
+    global enemy
+    if enemy == 'Paul':
+        ehp = 999999999
+        edamage = 999999999
+        if shield > 0:
+            shield = shield - edamage
+            if shield > 0:
+                print("Your arcane barrier received", edamage,"damage!")
+            if shield < 1:
+                shield = 0
+                print("Your arcane barrier was destroyed!")
+                sleep(5)
+            else:
+                hp = hp - edamage
+                print("You received",edamage,"damage!")
+                sleep(5)
+                print("Your body is engulfed in fire")
+                print("\n"*50)
+                print("""
+                                        =========
+                                        GAME OVER
+                                        =========""")
+                sleep(2)
+                quit()
+                
+    elif enemy != "Paul" and ehp > 0:
+        y = randint(1,10)
+        if y < 9:
+            edamage = randint(roomx*2+roomy*2,roomx*5+roomy*5)
+            if roomx + roomy == 10:
+                edamage = randint(25, 75)
+            if shield > 0:
+                shield = shield - edamage
+                if shield > 0:
+                    print("Your arcane barrier received", edamage,"damage!")
+                else:
+                    shield = 0
+                    print("Your arcane barrier was destroyed!")
+            else:
+                hp = hp - edamage
+                print("You received",edamage,"damage!")
+        else:
+            regain = roomx+roomy+ehp//10
+            ehp = ehp + regain
+            print(enemy,"gained", regain,"hp!")
+
+def checkenemy():
+    global ehp, enemy, hp, mp
+    ehp = (roomx*roomy*8)
+    if roomx + roomy == 9 or (roomx == 4 and roomy == 4):
+        ehp = 200
+    if roomx + roomy == 10:
+        ehp = 1000 
+    
+    shield = 0
+    paul = randint(1,1000)
+    if paul == 1 or check_paul == 1:
+        print("A creature emerges from the darkness, It's head blazes with fire")
+        enemy = "Paul"
+        return
+    if paul != 1:
         if roomx+roomy < 4:
             print("An unerving chill sweeps through your body.")
             enemy = "Goblin"
@@ -707,143 +882,38 @@ def combat():
         else:
             print("You hear breathing behind you.")
             enemy = "Troll"
-                
-        print ('')
-        sleep(.5)
-        print(enemy, "attacks!")
-        print('')
-            
-        while ehp > 0 and hp > 0:
-            print("Player hp:", hp,"Player mp:", mp,"Barrier hp:", shield, "Enemy hp:", ehp)
-            print('')
-            
-            do = input("use attack, spell or shield? ")
-            print('')
-            
-            if do == "attack":
-                damage = (randint(roomx+roomy, roomx+roomy+10))
-                
-                print('You attack the', enemy, 'and deal',damage, "damage.")
-                ehp = ehp - damage
-                
-            elif do == "spell":
+        
+def item_check():
+    global item
 
-                x = randint(1, 4)
-                if x == 1:
-                    spell = "fireball"
-                elif x == 2:
-                    spell = "frost bolt"
-                elif x == 3:
-                    spell = "lightning"
-                elif x == 4:
-                    spell = "purify"
-
-                damage = randint(roomx+roomy, (roomx*10 + roomy*10)//2)
-                if mp - (roomx+roomy) > 0:
-                    print("You cast", spell, "on the", enemy, "and deal",damage,"damage.")
-                    ehp = ehp - damage
-                    mp = mp - (damage // 2)
-                else:
-                    print("Not enough mp!")
-                    print('')
-                          
-            elif do == "shield":
-                if mp - (roomx+roomy)//4 > 0:
-                    shield = (roomx*roomy))*10
-                    mp = mp - shield//6
-                    print("You project an arcane barrier that will absorb",shield, "damage.")
-                else:
-                    print("Not enough mp!")
-                    print('')
-                    
-            else:
-                what()
-                print('')
-
-            if do == "shield" or do == "spell" or do == "attack":
-                enemyattack()                
-                    
-        if hp < 1:
-            print("n/"*50)
-            print("""
-                                        =========
-                                        GAME OVER
-                                        =========""")
-            sleep(2)
-            quit()
-
-        elif ehp < 1:
-            endcombat()
-
-def enemyattack():
-    global hp
-    global shield
-    global ehp
-    global enemy
-    if enemy != "Eldritch guardian" or enemy != "Eldritch horror":
-        y = randint(1,10)
-        if y < 9:
-            if ehp > 0:
-                edamage = randint(roomx*2+roomy*2,roomx*5+roomy*5)
-                if roomx + roomy == 10:
-                    edamage = randint(25, 75)
-                if shield > 0:
-                    shield = shield - edamage
-                    if shield > 0:
-                        print("Your arcane barrier received", edamage,"damage!")
-                    else:
-                        shield = 0
-                        print("Your arcane barrier was destroyed!")
-                else:
-                    hp = hp - edamage
-                    print("You received",edamage,"damage!")
-        else:
-            if ehp > 0:
-                regain = roomx+roomy+ehp//10
-                ehp = ehp + regain
-                print(enemy,"gained", regain,"hp!")
-            
-    else:
-        y = randint(1,20)
-        if y < 19:
-            if ehp > 0:
-                edamage = randint(roomx*2+roomy*2,roomx*5+roomy*5)
-                if roomx + roomy == 10:
-                    edamage = randint(25, 75)
-                if shield > 0:
-                    shield = shield - edamage
-                    if shield > 0:
-                        print("Your arcane barrier received", edamage,"damage!")
-                    else:
-                        shield = 0
-                        print("Your arcane barrier was destroyed!")
-                else:
-                    hp = hp - edamage
-                    print("You received",edamage,"damage!")
-        elif y == 19 and shield > 0:
-            edamage = shield//2
-            if shield > 0:
-                    shield = shield - edamage
-                    if shield > 0:
-                        print("Your arcane barrier was torn in half!")
-                    else:
-                        shield = 0
-                        print("Your arcane barrier was reduced to shreds!")
-            
-            
-        else:
-            if ehp > 0:
-                regain = roomx+roomy+ehp//20
-                ehp = ehp + regain
-                print(enemy,"gained", regain,"hp!")
-
+    checkitem = randint(1,100)
+    if checkitem < 6 and item < 5:
+        item = 5
+        print("Aquired a steel shortsword! Damage boost:",item)
+    if checkitem > 5 and checkitem < 10 and item < 25:
+        item = 25
+        print("Aquired an enchanted sabre! Damage boost:",item)
+    if checkitem > 9 and checkitem < 13 and item < 50:
+        item = 50
+        print("Aquired a mythril greatsword! Damage boost:",item)
+    if checkitem > 12 and checkitem < 14 and item < 75:
+        item = 75
+        print("Aquired the vampiric dagger! Damage boost:",item)
+    
+    if checkitem == 14 and item < 100:
+        item = 100
+        print("Aquired the Slayer of The Eldritch! Damage boost:",item)
+    print('')
+    
 def endcombat():
     global hp
     global mp
     global maxmp
     print(enemy, "was slain!")
     print('')
-        
+
+    item_check()
+
     if enemy == "Eldritch Guardian":
         print("Max Mp increased to:", maxmp+50)
         maxmp = maxmp + 50
@@ -884,58 +954,51 @@ def coridoor():
     global hp
     game = ''
     if hp == 100:
-
         do = input("You enter a long dark hallway. Do you proceed? yes or no? ")
-
     elif hp == 75:
-
         do = input("Voices whisper within the depths... Do you proceed? ")
-
     elif hp == 50:
-
         do = input("Blood grows upon the walls... Do you proceed? ")
-
     elif hp == 25:
-
         do = input("Distant wailing draws nearer... Do you proceed? ")
 
-            
+    if do == "paul":
+        check_paul = 1
+        combat()
     print('')
     if do == "yes":
         hp = hp - 25
         if hp < 1:
-            print("n/"*50)
-            
-            print("Feelings lost and taken away,")
-            sleep(1.5)
-            print("Though still alive this fateful day,")
-            sleep(1.5)
-            print("Sudden pain within your veins,")
-            sleep(1.5)
-            print("Bursting, spouting dark red stains,")
-            sleep(1.5)
-            print("He speaks of words with unknown meaning,")
-            sleep(1.5)
-            print("All this you knew,")
-            sleep(1.5)
-            print("From knowledge gained while dreaming.")
-            sleep(3)
-            print("n/"*50)
-            print("""
-                                    =========
-                                    GAME OVER
-                                    =========""")
+            hp = 100
+            print("\n"*50)
+            sleep(5)
+            print("Your soul freezes.")
             sleep(2)
-            game = "over"
-            quit()
+            print("You begin to bleed")
+            sleep(2)
+            print("your life is ripped from you.")
+            while hp > 0:
+                print("Hp:",hp)
+                hp = hp // 8
+                print("\n"*50)
+                sleep(.05)
+            if hp < 1:
+                sleep(5)
+                print("\n"*50)
+                print("""
+                                        =========
+                                        GAME OVER
+                                        =========""")
+                sleep(2)
+                game = "over"
+                quit()
         elif hp > 0:
             coridoor()
-    elif game == '':
+    elif do == 'no':
         hp = 100
         x4y1()
 
 
-# Leave this at the bottom - it makes start run automatically when you
-# run your code.
 if __name__ == "__main__":
     start()
+    
