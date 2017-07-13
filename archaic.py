@@ -894,21 +894,21 @@ def item_check():
     global item
 
     checkitem = randint(1,100)
-    if checkitem < 6 and item == 0:
+    if checkitem > 0 and checkitem < 26 and item < 1:
         item = 5
         print("Aquired a steel shortsword! Damage boost:",item)
     elif checkitem > 0 and checkitem < 21 and item == 5:
         item = 25
         print("Aquired an enchanted sabre! Damage boost:",item)
-    elif checkitem > 20 and checkitem < 31  and item == 25:
+    elif checkitem > 0 and checkitem < 11  and item == 25:
         item = 50
         print("Aquired a mythril greatsword! Damage boost:",item)
-    elif checkitem > 30 and checkitem < 36 and item == 50:
+    elif checkitem > 0 and checkitem < 6 and item == 50:
         item = 75
         print("Aquired the vampiric dagger! Damage boost:",item)
-    elif checkitem == 99 and item == 75:
+    elif checkitem == 1 and item == 75:
         item = 100
-        print("Aquired the Slayer of The Eldritch! Damage boost:",item)
+        print("Aquired the Slayer of The Eldritch! Damage boost:",item)   
     print('')
     
 def endcombat():
@@ -917,8 +917,6 @@ def endcombat():
     global maxmp
     print(enemy, "was slain!")
     print('')
-
-    item_check()
 
     if enemy == "Eldritch Guardian":
         print("Max Mp increased to:", maxmp+50)
@@ -954,7 +952,9 @@ def endcombat():
         sleep(2)
         print("Thank you for playing!")
         sleep(3)
-        quit()    
+        quit()
+
+    item_check()
                 
 def coridoor():
     global hp
@@ -1010,4 +1010,3 @@ def coridoor():
 if __name__ == "__main__":
     start()
     
-
